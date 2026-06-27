@@ -22,15 +22,18 @@ interface FlagsPanelProps {
 export function FlagsPanel({ flags }: FlagsPanelProps) {
   return (
     <div>
-      <div className="text-[10px] text-[#8B949E] font-semibold uppercase tracking-widest mb-2 px-1">
+      <div
+        className="text-[10px] font-semibold uppercase tracking-widest mb-2 px-1"
+        style={{ color: 'var(--text-secondary)' }}
+      >
         Flags
       </div>
 
       <div className="grid grid-cols-5 gap-1">
-        <FlagBit name="S"  value={flags.S}  title="Sign: result is negative" />
-        <FlagBit name="Z"  value={flags.Z}  title="Zero: result is zero" />
+        <FlagBit name="S" value={flags.S} title="Sign: result is negative" />
+        <FlagBit name="Z" value={flags.Z} title="Zero: result is zero" />
         <FlagBit name="AC" value={flags.AC} title="Aux Carry: carry from bit 3" />
-        <FlagBit name="P"  value={flags.P}  title="Parity: even number of 1-bits" />
+        <FlagBit name="P" value={flags.P} title="Parity: even number of 1-bits" />
         <FlagBit name="CY" value={flags.CY} title="Carry: carry out of bit 7" />
       </div>
     </div>
@@ -47,14 +50,18 @@ function FlagBit({ name, value, title }: FlagBitProps) {
   return (
     <div
       title={title}
-      className={`
-        flex flex-col items-center py-2 rounded cursor-help
-        border transition-all duration-200
-        ${value
-          ? 'bg-[#39D353]/10 border-[#39D353]/40 text-[#39D353]'
-          : 'bg-[#21262D] border-[#30363D] text-[#484F58]'
-        }
-      `}
+      className="flex flex-col items-center py-2 rounded cursor-help border transition-all duration-200"
+      style={{
+        backgroundColor: value
+          ? 'color-mix(in srgb, var(--accent-green) 10%, transparent)'
+          : 'var(--bg-tertiary)',
+        borderColor: value
+          ? 'color-mix(in srgb, var(--accent-green) 40%, transparent)'
+          : 'var(--border-color)',
+        color: value
+          ? 'var(--accent-green)'
+          : 'var(--text-muted)',
+      }}
     >
       <span className="text-[10px] font-semibold">{name}</span>
       <span className="text-sm font-bold mt-0.5">{value ? '1' : '0'}</span>

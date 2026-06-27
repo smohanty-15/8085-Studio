@@ -14,16 +14,41 @@ export function MessagePanel({ errors, messages }: MessagePanelProps) {
   if (errors.length === 0 && messages.length === 0) return null
 
   return (
-    <div className="border-t border-[#30363D] bg-[#0D1117] px-4 py-2 max-h-28 overflow-y-auto">
+    <div
+      className="border-t px-4 py-2 max-h-28 overflow-y-auto"
+      style={{
+        background: "var(--panel-bg)",
+        borderColor: "var(--border-color)",
+      }}
+    >
       {errors.map((err, i) => (
-        <div key={i} className="flex items-start gap-2 text-[11px] text-[#FF6B6B] font-mono py-0.5">
-          <span className="text-[#FF6B6B] mt-0.5 flex-shrink-0">✗</span>
+        <div
+          key={i}
+          className="flex items-start gap-2 text-[11px] font-mono py-0.5"
+          style={{ color: "var(--error-color)" }}
+        >
+          <span
+            className="mt-0.5 flex-shrink-0"
+            style={{ color: "var(--error-color)" }}
+          >
+            ✗
+          </span>
           <span>{err}</span>
         </div>
       ))}
+
       {messages.map((msg, i) => (
-        <div key={i} className="flex items-start gap-2 text-[11px] text-[#39D353] font-mono py-0.5">
-          <span className="text-[#39D353] mt-0.5 flex-shrink-0">✓</span>
+        <div
+          key={i}
+          className="flex items-start gap-2 text-[11px] font-mono py-0.5"
+          style={{ color: "var(--success-color)" }}
+        >
+          <span
+            className="mt-0.5 flex-shrink-0"
+            style={{ color: "var(--success-color)" }}
+          >
+            ✓
+          </span>
           <span>{msg}</span>
         </div>
       ))}

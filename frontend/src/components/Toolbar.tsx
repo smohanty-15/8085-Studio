@@ -24,14 +24,32 @@ export function Toolbar({
 }: ToolbarProps) {
 
   return (
-    <div className="flex items-center gap-2 px-4 py-2 bg-[#161B22] border-b border-[#30363D]">
+    <div
+      className="flex items-center gap-2 px-4 py-2 border-b"
+      style={{
+        background: 'var(--bg-secondary)',
+        borderColor: 'var(--border-color)',
+      }}
+    >
       {/* Logo */}
       <div className="flex items-center gap-2 mr-4">
-        <div className="w-2 h-2 rounded-full bg-[#39D353] animate-pulse" />
-        <span className="text-[#39D353] font-semibold text-sm tracking-widest">8085 STUDIO</span>
+        <div
+          className="w-2 h-2 rounded-full animate-pulse"
+          style={{ background: 'var(--accent-green)' }}
+        />
+
+        <span
+          className="font-semibold text-sm tracking-widest"
+          style={{ color: 'var(--accent-green)' }}
+        >
+          8085 STUDIO
+        </span>
       </div>
 
-      <div className="w-px h-5 bg-[#30363D]" />
+      <div
+        className="w-px h-5"
+        style={{ background: 'var(--border-color)' }}
+      />
 
       {/* Assemble button - primary action */}
       <Button
@@ -63,31 +81,67 @@ export function Toolbar({
         ⏭ Step
       </Button>
 
-      <div className="w-px h-5 bg-[#30363D]" />
+      <div
+        className="w-px h-5"
+        style={{ background: 'var(--border-color)' }}
+      />
 
       {/* Reset button */}
-      <Button onClick={onReset} disabled={isLoading} color="red" title="Reset CPU & Memory">
+      <Button
+        onClick={onReset}
+        disabled={isLoading}
+        color="red"
+        title="Reset CPU & Memory"
+      >
         ↺ Reset
       </Button>
 
       {/* Clear editor button */}
-      <Button onClick={onClear} disabled={isLoading} color="gray" title="Clear editor">
+      <Button
+        onClick={onClear}
+        disabled={isLoading}
+        color="gray"
+        title="Clear editor"
+      >
         ✕ Clear
       </Button>
 
       {/* Status indicator */}
       <div className="ml-auto flex items-center gap-2">
         {isLoading && (
-          <span className="text-[#8B949E] text-xs">Processing...</span>
+          <span
+            className="text-xs"
+            style={{ color: 'var(--text-secondary)' }}
+          >
+            Processing...
+          </span>
         )}
+
         {isHalted && !isLoading && (
-          <span className="text-[#FF6B6B] text-xs font-medium">● HALTED</span>
+          <span
+            className="text-xs font-medium"
+            style={{ color: 'var(--accent-red)' }}
+          >
+            ● HALTED
+          </span>
         )}
+
         {isAssembled && !isHalted && !isLoading && (
-          <span className="text-[#39D353] text-xs font-medium">● READY</span>
+          <span
+            className="text-xs font-medium"
+            style={{ color: 'var(--accent-green)' }}
+          >
+            ● READY
+          </span>
         )}
+
         {!isAssembled && !isLoading && (
-          <span className="text-[#8B949E] text-xs">Not assembled</span>
+          <span
+            className="text-xs"
+            style={{ color: 'var(--text-secondary)' }}
+          >
+            Not assembled
+          </span>
         )}
       </div>
     </div>
@@ -104,12 +158,13 @@ interface ButtonProps {
 }
 
 function Button({ onClick, disabled, color, title, children }: ButtonProps) {
+
   const colorMap = {
-    green:  'hover:bg-[#39D353]/20 hover:text-[#39D353] border-[#39D353]/30',
-    blue:   'hover:bg-[#58A6FF]/20 hover:text-[#58A6FF] border-[#58A6FF]/30',
-    yellow: 'hover:bg-[#F0C674]/20 hover:text-[#F0C674] border-[#F0C674]/30',
-    red:    'hover:bg-[#FF6B6B]/20 hover:text-[#FF6B6B] border-[#FF6B6B]/30',
-    gray:   'hover:bg-[#8B949E]/20 hover:text-[#8B949E] border-[#8B949E]/30',
+    green: 'var(--accent-green)',
+    blue: 'var(--accent-blue)',
+    yellow: 'var(--accent-yellow)',
+    red: 'var(--accent-red)',
+    gray: 'var(--text-secondary)',
   }
 
   return (
@@ -117,13 +172,26 @@ function Button({ onClick, disabled, color, title, children }: ButtonProps) {
       onClick={onClick}
       disabled={disabled}
       title={title}
-      className={`
-        px-3 py-1 rounded text-xs font-medium
-        text-[#8B949E] border border-transparent
-        transition-all duration-150
-        disabled:opacity-30 disabled:cursor-not-allowed
-        ${!disabled ? colorMap[color] : ''}
-      `}
+      className="px-3 py-1 rounded text-xs font-medium border transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed"
+      style={{
+        color: 'var(--text-secondary)',
+        borderColor: 'transparent',
+      }}
+      onMouseEnter={e => {
+        if (disabled) return
+
+        e.currentTarget.style.color = colorMap[color]
+        e.currentTarget.style.borderColor = colorMap[color]
+        e.currentTarget.style.background =
+          `color-mix(in srgb, ${colorMap[color]} 15%, transparent)`
+      }}
+      onMouseLeave={e => {
+        if (disabled) return
+
+        e.currentTarget.style.color = 'var(--text-secondary)'
+        e.currentTarget.style.borderColor = 'transparent'
+        e.currentTarget.style.background = 'transparent'
+      }}
     >
       {children}
     </button>

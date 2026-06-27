@@ -34,25 +34,56 @@ export function MemoryViewer({ cells, currentPC, memStart, onNavigate }: MemoryV
     <div className="flex flex-col h-full">
       {/* Header */}
       <div className="flex items-center justify-between mb-2 px-1">
-        <span className="text-[10px] text-[#8B949E] font-semibold uppercase tracking-widest">
+        <span
+          className="text-[10px] font-semibold uppercase tracking-widest"
+          style={{ color: 'var(--text-secondary)' }}
+        >
           Memory Viewer
         </span>
 
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-[#484F58]">
+          <span
+            className="text-[10px]"
+            style={{ color: 'var(--text-muted)' }}
+          >
             0x{memStart.toString(16).toUpperCase().padStart(4, '0')} — 0x{(memStart + cells.length - 1).toString(16).toUpperCase().padStart(4, '0')}
           </span>
 
           {/* Navigation buttons */}
           <button
             onClick={() => onNavigate(Math.max(0, memStart - 64))}
-            className="px-2 py-0.5 text-[10px] text-[#8B949E] hover:text-[#E6EDF3] border border-[#30363D] rounded hover:border-[#484F58] transition-colors"
+            className="px-2 py-0.5 text-[10px] border rounded transition-colors"
+            style={{
+              color: 'var(--text-secondary)',
+              borderColor: 'var(--border-color)',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.color = 'var(--text-primary)'
+              e.currentTarget.style.borderColor = 'var(--text-muted)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.color = 'var(--text-secondary)'
+              e.currentTarget.style.borderColor = 'var(--border-color)'
+            }}
           >
             ‹ Prev
           </button>
+
           <button
             onClick={() => onNavigate(Math.min(0xFFC0, memStart + 64))}
-            className="px-2 py-0.5 text-[10px] text-[#8B949E] hover:text-[#E6EDF3] border border-[#30363D] rounded hover:border-[#484F58] transition-colors"
+            className="px-2 py-0.5 text-[10px] border rounded transition-colors"
+            style={{
+              color: 'var(--text-secondary)',
+              borderColor: 'var(--border-color)',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.color = 'var(--text-primary)'
+              e.currentTarget.style.borderColor = 'var(--text-muted)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.color = 'var(--text-secondary)'
+              e.currentTarget.style.borderColor = 'var(--border-color)'
+            }}
           >
             Next ›
           </button>
@@ -64,11 +95,27 @@ export function MemoryViewer({ cells, currentPC, memStart, onNavigate }: MemoryV
             onChange={e => setInputAddr(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleNavigate()}
             placeholder="Go to addr (e.g. 2000H)"
-            className="text-[10px] bg-[#21262D] border border-[#30363D] rounded px-2 py-0.5 text-[#E6EDF3] placeholder-[#484F58] focus:outline-none focus:border-[#58A6FF] w-36"
+            className="text-[10px] border rounded px-2 py-0.5 focus:outline-none w-36"
+            style={{
+              background: 'var(--bg-tertiary)',
+              borderColor: 'var(--border-color)',
+              color: 'var(--text-primary)',
+            }}
           />
+
           <button
             onClick={handleNavigate}
-            className="px-2 py-0.5 text-[10px] text-[#58A6FF] border border-[#58A6FF]/30 rounded hover:bg-[#58A6FF]/10 transition-colors"
+            className="px-2 py-0.5 text-[10px] border rounded transition-colors"
+            style={{
+              color: 'var(--accent-blue)',
+              borderColor: 'var(--accent-blue)',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(88,166,255,0.10)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'transparent'
+            }}
           >
             Go
           </button>
@@ -76,17 +123,27 @@ export function MemoryViewer({ cells, currentPC, memStart, onNavigate }: MemoryV
       </div>
 
       {/* Table */}
-      <div className="overflow-auto flex-1 border border-[#30363D] rounded">
+      <div
+        className="overflow-auto flex-1 border rounded"
+        style={{ borderColor: 'var(--border-color)' }}
+      >
         <table className="w-full text-xs font-mono">
           <thead>
-            <tr className="border-b border-[#30363D] bg-[#161B22] sticky top-0">
-              <th className="text-left px-3 py-1.5 text-[#8B949E] font-medium w-24">Address</th>
-              <th className="text-left px-3 py-1.5 text-[#8B949E] font-medium w-16">Hex</th>
-              <th className="text-left px-3 py-1.5 text-[#8B949E] font-medium w-16">Dec</th>
-              <th className="text-left px-3 py-1.5 text-[#8B949E] font-medium w-16">Binary</th>
+            <tr
+              className="border-b sticky top-0"
+              style={{
+                borderColor: 'var(--border-color)',
+                background: 'var(--bg-secondary)',
+              }}
+            >
+              <th className="text-left px-3 py-1.5 font-medium w-24" style={{ color: 'var(--text-secondary)' }}>Address</th>
+              <th className="text-left px-3 py-1.5 font-medium w-16" style={{ color: 'var(--text-secondary)' }}>Hex</th>
+              <th className="text-left px-3 py-1.5 font-medium w-16" style={{ color: 'var(--text-secondary)' }}>Dec</th>
+              <th className="text-left px-3 py-1.5 font-medium w-16" style={{ color: 'var(--text-secondary)' }}>Binary</th>
               <th className="px-3 py-1.5"></th>
             </tr>
           </thead>
+
           <tbody>
             {cells.map(cell => {
               const isPC = cell.address === currentPC
@@ -95,35 +152,73 @@ export function MemoryViewer({ cells, currentPC, memStart, onNavigate }: MemoryV
               return (
                 <tr
                   key={cell.address}
-                  className={`
-                    border-b border-[#21262D] transition-colors
-                    ${isPC
-                      ? 'bg-[#F0C674]/10 border-l-2 border-l-[#F0C674]'
+                  className="border-b transition-colors"
+                  style={{
+                    borderColor: 'var(--border-subtle)',
+                    background: isPC
+                      ? 'rgba(240,198,116,0.10)'
+                      : 'transparent',
+                    opacity: isPC
+                      ? 1
                       : isEmpty
-                        ? 'opacity-30 hover:opacity-60'
-                        : 'hover:bg-[#21262D]'
-                    }
-                  `}
+                      ? 0.3
+                      : 1,
+                  }}
                 >
-                  <td className={`px-3 py-1 ${isPC ? 'text-[#F0C674] font-bold' : 'text-[#58A6FF]'}`}>
-                    {isPC && <span className="mr-1 text-[#F0C674]">▶</span>}
+                  <td
+                    className="px-3 py-1"
+                    style={{
+                      color: isPC ? 'var(--accent-yellow)' : 'var(--accent-blue)',
+                      fontWeight: isPC ? 'bold' : 'normal',
+                      borderLeft: isPC ? '2px solid var(--accent-yellow)' : undefined,
+                    }}
+                  >
+                    {isPC && (
+                      <span
+                        className="mr-1"
+                        style={{ color: 'var(--accent-yellow)' }}
+                      >
+                        ▶
+                      </span>
+                    )}
                     {cell.addressHex}H
                   </td>
-                  <td className={`px-3 py-1 ${isEmpty ? 'text-[#484F58]' : 'text-[#39D353]'}`}>
+
+                  <td
+                    className="px-3 py-1"
+                    style={{
+                      color: isEmpty
+                        ? 'var(--text-muted)'
+                        : 'var(--accent-green)',
+                    }}
+                  >
                     {cell.valueHex}
                   </td>
-                  <td className="px-3 py-1 text-[#8B949E]">
+
+                  <td
+                    className="px-3 py-1"
+                    style={{ color: 'var(--text-secondary)' }}
+                  >
                     {cell.value}
                   </td>
-                  <td className="px-3 py-1 text-[#484F58] text-[9px]">
+
+                  <td
+                    className="px-3 py-1 text-[9px]"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
                     {cell.value.toString(2).padStart(8, '0')}
                   </td>
+
                   <td className="px-3 py-1">
                     {/* Visual bar showing relative value */}
                     {cell.value > 0 && (
                       <div
-                        className="h-1.5 rounded-full bg-[#39D353]/40"
-                        style={{ width: `${(cell.value / 255) * 60}px` }}
+                        className="h-1.5 rounded-full"
+                        style={{
+                          width: `${(cell.value / 255) * 60}px`,
+                          background: 'var(--accent-green)',
+                          opacity: 0.4,
+                        }}
                       />
                     )}
                   </td>
@@ -134,7 +229,10 @@ export function MemoryViewer({ cells, currentPC, memStart, onNavigate }: MemoryV
         </table>
 
         {cells.length === 0 && (
-          <div className="flex items-center justify-center h-16 text-[#484F58] text-xs">
+          <div
+            className="flex items-center justify-center h-16 text-xs"
+            style={{ color: 'var(--text-muted)' }}
+          >
             No memory data. Assemble a program first.
           </div>
         )}

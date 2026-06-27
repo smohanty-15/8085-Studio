@@ -125,20 +125,59 @@ interface SampleProgramsProps {
 export function SamplePrograms({ onLoad }: SampleProgramsProps) {
   return (
     <div className="relative group">
-      <button className="px-3 py-1 text-xs text-[#8B949E] border border-transparent rounded hover:text-[#58A6FF] hover:border-[#58A6FF]/30 hover:bg-[#58A6FF]/10 transition-all">
+      <button
+        className="px-3 py-1 text-xs border border-transparent rounded transition-all"
+        style={{
+          color: 'var(--text-secondary)',
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.color = 'var(--accent-blue)'
+          e.currentTarget.style.borderColor = 'var(--accent-blue)'
+          e.currentTarget.style.background =
+            'color-mix(in srgb, var(--accent-blue) 10%, transparent)'
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.color = 'var(--text-secondary)'
+          e.currentTarget.style.borderColor = 'transparent'
+          e.currentTarget.style.background = 'transparent'
+        }}
+      >
         📂 Examples ▾
       </button>
 
-      <div className="absolute top-full left-0 mt-1 w-72 bg-[#161B22] border border-[#30363D] rounded-lg shadow-xl z-50 hidden group-hover:block">
+      <div
+        className="absolute top-full left-0 mt-1 w-72 rounded-lg shadow-xl z-50 hidden group-hover:block"
+        style={{
+          background: 'var(--bg-secondary)',
+          border: '1px solid var(--border-color)',
+        }}
+      >
         <div className="p-1">
           {SAMPLES.map((sample) => (
             <button
               key={sample.name}
               onClick={() => onLoad(sample.code)}
-              className="w-full text-left px-3 py-2 rounded text-xs hover:bg-[#21262D] transition-colors"
+              className="w-full text-left px-3 py-2 rounded text-xs transition-colors"
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'var(--bg-tertiary)'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'transparent'
+              }}
             >
-              <div className="text-[#E6EDF3] font-medium">{sample.name}</div>
-              <div className="text-[#8B949E] text-[10px] mt-0.5">{sample.description}</div>
+              <div
+                className="font-medium"
+                style={{ color: 'var(--text-primary)' }}
+              >
+                {sample.name}
+              </div>
+
+              <div
+                className="text-[10px] mt-0.5"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                {sample.description}
+              </div>
             </button>
           ))}
         </div>

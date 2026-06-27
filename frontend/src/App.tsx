@@ -32,6 +32,7 @@ import { MemoryViewer }  from './components/MemoryViewer'
 import { MessagePanel }  from './components/MessagePanel'
 import { SamplePrograms } from './components/SamplePrograms'
 import { useEmulator }   from './hooks/useEmulator'
+import { useTheme }      from './context/ThemeContext'
 
 export default function App() {
   const [code, setCode] = useState(DEFAULT_CODE)
@@ -41,6 +42,10 @@ export default function App() {
     isAssembled, isLoading, memStart,
     assemble, step, run, reset, navigateMemory,
   } = useEmulator()
+
+  // ── Theme ───────────────────────────────────────────────────────────────
+  const { theme, toggleTheme } = useTheme()
+  const isDark = theme === 'dark'
 
   const handleAssemble = useCallback(() => {
     assemble(code)
@@ -55,7 +60,14 @@ export default function App() {
   }, [])
 
   return (
-    <div className="flex flex-col h-screen bg-[#0D1117] text-[#E6EDF3] overflow-hidden">
+    // Root uses CSS variables so every nested element inherits theme colors
+    <div
+      className="flex flex-col h-screen overflow-hidden"
+      style={{
+        backgroundColor: 'var(--bg-primary)',
+        color: 'var(--text-primary)',
+      }}
+    >
 
       {/* ── TOOLBAR ── */}
       <Toolbar
@@ -75,15 +87,57 @@ export default function App() {
         {/* LEFT: Code Editor */}
         <div className="flex flex-col flex-1 min-w-0">
 
-          {/* Editor toolbar (samples, file buttons) */}
-          <div className="flex items-center gap-2 px-4 py-1.5 bg-[#161B22] border-b border-[#30363D]">
-            <span className="text-[10px] text-[#484F58] uppercase tracking-widest">Editor</span>
+          {/* Editor toolbar (samples, file buttons, theme toggle) */}
+          <div
+            className="flex items-center gap-2 px-4 py-1.5 border-b"
+            style={{
+              backgroundColor: 'var(--bg-secondary)',
+              borderColor: 'var(--border-color)',
+            }}
+          >
+            <span
+              className="text-[10px] uppercase tracking-widest"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              Editor
+            </span>
+
             <div className="ml-2">
               <SamplePrograms onLoad={handleLoadSample} />
             </div>
+
             {/* File save/load buttons */}
             <SaveLoadButtons code={code} onLoad={setCode} />
-            <span className="ml-auto text-[10px] text-[#484F58]">Ctrl+Enter to assemble</span>
+
+            <span
+              className="ml-auto text-[10px]"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              Ctrl+Enter to assemble
+            </span>
+
+            {/* ── THEME TOGGLE BUTTON ── */}
+            {/* Placed at the far right of the editor toolbar bar */}
+            <button
+              onClick={toggleTheme}
+              title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              className="ml-2 px-2 py-0.5 text-[11px] rounded border transition-colors"
+              style={{
+                borderColor: 'var(--border-color)',
+                color: 'var(--text-secondary)',
+                backgroundColor: 'transparent',
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--text-secondary)'
+                ;(e.currentTarget as HTMLButtonElement).style.color = 'var(--text-primary)'
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--border-color)'
+                ;(e.currentTarget as HTMLButtonElement).style.color = 'var(--text-secondary)'
+              }}
+            >
+              {isDark ? '☀ Light' : '☾ Dark'}
+            </button>
           </div>
 
           {/* Monaco editor */}
@@ -100,14 +154,36 @@ export default function App() {
         </div>
 
         {/* RIGHT: Registers + Flags + PC info */}
-        <div className="w-56 flex flex-col border-l border-[#30363D] bg-[#161B22] overflow-hidden">
+        <div
+          className="w-56 flex flex-col border-l overflow-hidden"
+          style={{
+            borderColor: 'var(--border-color)',
+            backgroundColor: 'var(--bg-secondary)',
+          }}
+        >
 
           {/* PC / Status section */}
-          <div className="px-3 pt-2 pb-2 border-b border-[#30363D]">
-            <div className="text-[10px] text-[#8B949E] uppercase tracking-widest mb-1">Status</div>
+          <div
+            className="px-3 pt-2 pb-2 border-b"
+            style={{ borderColor: 'var(--border-color)' }}
+          >
+            <div
+              className="text-[10px] uppercase tracking-widest mb-1"
+              style={{ color: 'var(--text-secondary)' }}
+            >
+              Status
+            </div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] text-[#484F58]">PC:</span>
-              <span className="text-xs text-[#F0C674] font-mono">
+              <span
+                className="text-[10px]"
+                style={{ color: 'var(--text-muted)' }}
+              >
+                PC:
+              </span>
+              <span
+                className="text-xs font-mono"
+                style={{ color: 'var(--accent-yellow)' }}
+              >
                 {cpuState.registers.PC.toString(16).toUpperCase().padStart(4, '0')}H
               </span>
               <span className={`ml-auto text-[9px] px-1.5 py-0.5 rounded-full font-medium ${
@@ -126,14 +202,23 @@ export default function App() {
           </div>
 
           {/* Flags */}
-          <div className="px-3 pb-3 border-t border-[#30363D] pt-3">
+          <div
+            className="px-3 pb-3 border-t pt-3"
+            style={{ borderColor: 'var(--border-color)' }}
+          >
             <FlagsPanel flags={cpuState.flags} />
           </div>
         </div>
       </div>
 
       {/* ── BOTTOM: Memory Viewer ── */}
-      <div className="h-52 border-t border-[#30363D] bg-[#0D1117] px-4 py-2 flex flex-col">
+      <div
+        className="h-52 border-t px-4 py-2 flex flex-col"
+        style={{
+          borderColor: 'var(--border-color)',
+          backgroundColor: 'var(--bg-primary)',
+        }}
+      >
         <MemoryViewer
           cells={memory}
           currentPC={cpuState.registers.PC}
@@ -176,14 +261,32 @@ function SaveLoadButtons({ code, onLoad }: { code: string; onLoad: (c: string) =
     <div className="flex items-center gap-1">
       <button
         onClick={handleOpen}
-        className="px-2 py-0.5 text-[10px] text-[#8B949E] hover:text-[#E6EDF3] border border-transparent hover:border-[#30363D] rounded transition-colors"
+        className="px-2 py-0.5 text-[10px] border border-transparent rounded transition-colors"
+        style={{ color: 'var(--text-secondary)' }}
+        onMouseEnter={e => {
+          (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-primary)'
+          ;(e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--border-color)'
+        }}
+        onMouseLeave={e => {
+          (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-secondary)'
+          ;(e.currentTarget as HTMLButtonElement).style.borderColor = 'transparent'
+        }}
         title="Open .asm file"
       >
         📁 Open
       </button>
       <button
         onClick={handleSave}
-        className="px-2 py-0.5 text-[10px] text-[#8B949E] hover:text-[#E6EDF3] border border-transparent hover:border-[#30363D] rounded transition-colors"
+        className="px-2 py-0.5 text-[10px] border border-transparent rounded transition-colors"
+        style={{ color: 'var(--text-secondary)' }}
+        onMouseEnter={e => {
+          (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-primary)'
+          ;(e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--border-color)'
+        }}
+        onMouseLeave={e => {
+          (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-secondary)'
+          ;(e.currentTarget as HTMLButtonElement).style.borderColor = 'transparent'
+        }}
         title="Save as .asm file"
       >
         💾 Save

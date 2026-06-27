@@ -2,16 +2,93 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── CSS Custom Properties (Design Tokens) ──────────────────────────────────
+   All colors used in the app flow through these variables.
+   The [data-theme="light"] block overrides them for light mode.
+   JavaScript sets data-theme on <html> via ThemeContext.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Dark mode defaults (matches original hardcoded colors) */
+  --bg-primary:    #0D1117;
+  --bg-secondary:  #161B22;
+  --bg-tertiary:   #1C2128;
+  --border-color:  #30363D;
+  --border-subtle: #21262D;
+
+  --text-primary:  #E6EDF3;
+  --text-secondary:#8B949E;
+  --text-muted:    #484F58;
+
+  --accent-green:  #39D353;
+  --accent-yellow: #F0C674;
+  --accent-red:    #FF6B6B;
+  --accent-blue:   #58A6FF;
+  --accent-orange: #E8912D;
+  --accent-purple: #BC8CFF;
+  --accent-cyan:   #56D364;
+
+  /* Scrollbar */
+  --scrollbar-track: #161B22;
+  --scrollbar-thumb: #30363D;
+  --scrollbar-hover: #484F58;
+}
+
+[data-theme="light"] {
+  /* Light mode overrides */
+  --bg-primary:    #FFFFFF;
+  --bg-secondary:  #F6F8FA;
+  --bg-tertiary:   #EAEEF2;
+  --border-color:  #D0D7DE;
+  --border-subtle: #E8ECF0;
+
+  --text-primary:  #1F2328;
+  --text-secondary:#57606A;
+  --text-muted:    #8C959F;
+
+  --accent-green:  #1A7F37;
+  --accent-yellow: #9A6700;
+  --accent-red:    #CF222E;
+  --accent-blue:   #0969DA;
+  --accent-orange: #BC4C00;
+  --accent-purple: #6639BA;
+  --accent-cyan:   #0550AE;
+
+  /* Scrollbar */
+  --scrollbar-track: #F6F8FA;
+  --scrollbar-thumb: #D0D7DE;
+  --scrollbar-hover: #8C959F;
+}
+
+/* ─── Base Styles ─────────────────────────────────────────────────────────── */
+
 html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #0D1117;
-  color: #E6EDF3;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  /* Smooth transition when switching themes */
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+/* ─── Scrollbars ──────────────────────────────────────────────────────────── */
+
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #161B22; }
-::-webkit-scrollbar-thumb { background: #30363D; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #484F58; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-hover); }
+
+/* ─── Theme-aware utility classes ────────────────────────────────────────────
+   Use these in components instead of hardcoded Tailwind color classes.
+   Example: className="theme-bg-primary theme-text-primary theme-border"
+   ──────────────────────────────────────────────────────────────────────────── */
+
+.theme-bg-primary   { background-color: var(--bg-primary); }
+.theme-bg-secondary { background-color: var(--bg-secondary); }
+.theme-bg-tertiary  { background-color: var(--bg-tertiary); }
+.theme-border       { border-color: var(--border-color); }
+.theme-text-primary { color: var(--text-primary); }
+.theme-text-secondary { color: var(--text-secondary); }
+.theme-text-muted   { color: var(--text-muted); }

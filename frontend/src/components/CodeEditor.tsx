@@ -6,6 +6,7 @@
 import Editor from '@monaco-editor/react'
 import { useRef } from 'react'
 import type * as Monaco from 'monaco-editor'
+import { useTheme } from '../context/ThemeContext'
 
 interface CodeEditorProps {
   value: string
@@ -59,23 +60,48 @@ function setupMonaco(monaco: typeof Monaco) {
     base: 'vs-dark',
     inherit: true,
     rules: [
-      { token: 'comment',         foreground: '6e7681', fontStyle: 'italic' },
-      { token: 'keyword',         foreground: 'ff7b72', fontStyle: 'bold' },
+      { token: 'comment', foreground: '6e7681', fontStyle: 'italic' },
+      { token: 'keyword', foreground: 'ff7b72', fontStyle: 'bold' },
       { token: 'type.identifier', foreground: 'f0c674' },
-      { token: 'variable.name',   foreground: '79c0ff' },
-      { token: 'number.hex',      foreground: '39d353' },
-      { token: 'number',          foreground: '39d353' },
-      { token: 'delimiter',       foreground: '8b949e' },
+      { token: 'variable.name', foreground: '79c0ff' },
+      { token: 'number.hex', foreground: '39d353' },
+      { token: 'number', foreground: '39d353' },
+      { token: 'delimiter', foreground: '8b949e' },
     ],
     colors: {
-      'editor.background':              '#0D1117',
-      'editor.foreground':              '#E6EDF3',
+      'editor.background': '#0D1117',
+      'editor.foreground': '#E6EDF3',
       'editor.lineHighlightBackground': '#161B22',
-      'editor.selectionBackground':     '#264F78',
-      'editorLineNumber.foreground':    '#484F58',
+      'editor.selectionBackground': '#264F78',
+      'editorLineNumber.foreground': '#484F58',
       'editorLineNumber.activeForeground': '#8B949E',
-      'editorGutter.background':        '#0D1117',
-      'editorCursor.foreground':        '#39D353',
+      'editorGutter.background': '#0D1117',
+      'editorCursor.foreground': '#39D353',
+    },
+  })
+
+  // Light Theme
+  monaco.editor.defineTheme('8085-light', {
+    base: 'vs',
+    inherit: true,
+    rules: [
+      { token: 'comment', foreground: '6A737D', fontStyle: 'italic' },
+      { token: 'keyword', foreground: 'CF222E', fontStyle: 'bold' },
+      { token: 'type.identifier', foreground: '9A6700' },
+      { token: 'variable.name', foreground: '0969DA' },
+      { token: 'number.hex', foreground: '1A7F37' },
+      { token: 'number', foreground: '1A7F37' },
+      { token: 'delimiter', foreground: '57606A' },
+    ],
+    colors: {
+      'editor.background': '#FFFFFF',
+      'editor.foreground': '#1F2328',
+      'editor.lineHighlightBackground': '#F6F8FA',
+      'editor.selectionBackground': '#B6D6FF',
+      'editorLineNumber.foreground': '#8C959F',
+      'editorLineNumber.activeForeground': '#57606A',
+      'editorGutter.background': '#FFFFFF',
+      'editorCursor.foreground': '#0969DA',
     },
   })
 }
@@ -84,13 +110,22 @@ export function CodeEditor({ value, onChange, onAssemble }: CodeEditorProps) {
   const onAssembleRef = useRef(onAssemble)
   onAssembleRef.current = onAssemble
 
+  const { theme } = useTheme()
+
   return (
-    <div className="h-full" style={{ border: '1px solid #30363D', borderRadius: 6, overflow: 'hidden' }}>
+    <div
+      className="h-full"
+      style={{
+        border: '1px solid var(--border-color)',
+        borderRadius: 6,
+        overflow: 'hidden',
+      }}
+    >
       <Editor
         language="8085asm"
         value={value}
         onChange={v => onChange(v ?? '')}
-        theme="8085-dark"
+        theme={theme === 'dark' ? '8085-dark' : '8085-light'}
         beforeMount={setupMonaco}
         options={{
           fontSize: 13,

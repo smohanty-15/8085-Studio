@@ -20,34 +20,74 @@ interface RegisterPanelProps {
 export function RegisterPanel({ registers }: RegisterPanelProps) {
   return (
     <div className="flex flex-col h-full">
-      <div className="text-[10px] text-[#8B949E] font-semibold uppercase tracking-widest mb-2 px-1">
+      <div
+        className="text-[10px] font-semibold uppercase tracking-widest mb-2 px-1"
+        style={{ color: 'var(--text-secondary)' }}
+      >
         Registers
       </div>
 
       <div className="space-y-1 flex-1 overflow-y-auto">
         {/* 8-bit general purpose registers */}
         <RegRow name="A" value={registers.A} bits={8} note="Accumulator" highlight />
-        <div className="h-px bg-[#21262D] my-1" />
+
+        <div
+          className="h-px my-1"
+          style={{ background: 'var(--border-subtle)' }}
+        />
+
         <RegRow name="B" value={registers.B} bits={8} note="General" />
         <RegRow name="C" value={registers.C} bits={8} note="General" />
         <RegRow name="D" value={registers.D} bits={8} note="General" />
         <RegRow name="E" value={registers.E} bits={8} note="General" />
         <RegRow name="H" value={registers.H} bits={8} note="General" />
         <RegRow name="L" value={registers.L} bits={8} note="General" />
-        <div className="h-px bg-[#21262D] my-1" />
+
+        <div
+          className="h-px my-1"
+          style={{ background: 'var(--border-subtle)' }}
+        />
+
         {/* 16-bit registers */}
         <RegRow name="PC" value={registers.PC} bits={16} note="Prog Counter" highlight />
         <RegRow name="SP" value={registers.SP} bits={16} note="Stack Ptr" />
-        <div className="h-px bg-[#21262D] my-1" />
+
+        <div
+          className="h-px my-1"
+          style={{ background: 'var(--border-subtle)' }}
+        />
+
         {/* HL pair computed value */}
-        <div className="flex items-center justify-between px-2 py-1 rounded bg-[#21262D]/50">
+        <div
+          className="flex items-center justify-between px-2 py-1 rounded"
+          style={{ background: 'color-mix(in srgb, var(--bg-tertiary) 50%, transparent)' }}
+        >
           <div>
-            <span className="text-[#8B949E] text-[11px]">HL</span>
-            <span className="text-[#484F58] text-[9px] ml-1">pair</span>
+            <span
+              className="text-[11px]"
+              style={{ color: 'var(--text-secondary)' }}
+            >
+              HL
+            </span>
+
+            <span
+              className="text-[9px] ml-1"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              pair
+            </span>
           </div>
+
           <div className="text-right">
-            <span className="text-[#58A6FF] text-xs font-mono">
-              {((registers.H << 8) | registers.L).toString(16).toUpperCase().padStart(4, '0')}H
+            <span
+              className="text-xs font-mono"
+              style={{ color: 'var(--accent-blue)' }}
+            >
+              {((registers.H << 8) | registers.L)
+                .toString(16)
+                .toUpperCase()
+                .padStart(4, '0')}
+              H
             </span>
           </div>
         </div>
@@ -70,21 +110,61 @@ function RegRow({ name, value, bits, note, highlight }: RegRowProps) {
   const decStr = value.toString(10)
 
   return (
-    <div className={`
-      flex items-center justify-between px-2 py-1 rounded
-      ${highlight ? 'bg-[#21262D]' : 'hover:bg-[#21262D]/50'}
-      transition-colors
-    `}>
+    <div
+      className="flex items-center justify-between px-2 py-1 rounded transition-colors"
+      style={{
+        background: highlight
+          ? 'var(--bg-tertiary)'
+          : 'transparent',
+      }}
+      onMouseEnter={e => {
+        if (!highlight) {
+          e.currentTarget.style.background =
+            'color-mix(in srgb, var(--bg-tertiary) 50%, transparent)'
+        }
+      }}
+      onMouseLeave={e => {
+        if (!highlight) {
+          e.currentTarget.style.background = 'transparent'
+        }
+      }}
+    >
       <div className="flex items-center gap-2 min-w-[48px]">
-        <span className={`text-xs font-semibold w-6 ${highlight ? 'text-[#F0C674]' : 'text-[#8B949E]'}`}>
+        <span
+          className="text-xs font-semibold w-6"
+          style={{
+            color: highlight
+              ? 'var(--accent-yellow)'
+              : 'var(--text-secondary)',
+          }}
+        >
           {name}
         </span>
-        {note && <span className="text-[9px] text-[#484F58]">{note}</span>}
+
+        {note && (
+          <span
+            className="text-[9px]"
+            style={{ color: 'var(--text-muted)' }}
+          >
+            {note}
+          </span>
+        )}
       </div>
 
       <div className="text-right">
-        <span className="text-[#39D353] text-xs font-mono">{hexStr}H</span>
-        <span className="text-[#484F58] text-[10px] ml-2">{decStr}</span>
+        <span
+          className="text-xs font-mono"
+          style={{ color: 'var(--accent-green)' }}
+        >
+          {hexStr}H
+        </span>
+
+        <span
+          className="text-[10px] ml-2"
+          style={{ color: 'var(--text-muted)' }}
+        >
+          {decStr}
+        </span>
       </div>
     </div>
   )
