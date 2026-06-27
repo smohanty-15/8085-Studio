@@ -26,7 +26,7 @@ FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 
-# Copy built JAR from stage 1
+# Copy built JAR from stage 1 . 
 COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 9090
