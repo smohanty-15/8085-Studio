@@ -8,7 +8,7 @@ A browser-based Intel 8085 microprocessor emulator. Write assembly, assemble it,
 
 | Tool | Version | Download |
 |------|---------|----------|
-| Java | 21+ | https://adoptium.net |
+| Java | 17+ | https://adoptium.net |
 | Maven | 3.8+ | https://maven.apache.org |
 | Node.js | 18+ | https://nodejs.org |
 
