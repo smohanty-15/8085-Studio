@@ -1,0 +1,11 @@
+#Maven
+target/
+
+#Node.js
+node_modules/
+
+#VS code
+.vscode/
+
+#Logs
+*.log
