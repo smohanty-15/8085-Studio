@@ -15,7 +15,10 @@ import type {
   MemoryResponse
 } from '../types/emulator'
 
-const BASE = '/api'
+const BASE =
+  import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/api`
+    : '/api'
 
 /** Assemble source code and load it into the emulator */
 export async function assembleCode(source: string): Promise<AssembleResponse> {
