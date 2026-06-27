@@ -20,6 +20,9 @@ const BASE =
     ? `${import.meta.env.VITE_API_URL}/api`
     : '/api'
 
+//temp log
+console.log("API BASE=",BASE);
+
 /** Assemble source code and load it into the emulator */
 export async function assembleCode(source: string): Promise<AssembleResponse> {
   const res = await fetch(`${BASE}/assemble`, {
