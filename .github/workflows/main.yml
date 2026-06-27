@@ -36,8 +36,8 @@ jobs:
           context: ./backend
           push: true
           tags: |
-            smohanty15/8085-Studio:latest
-            smohanty15/8085-Studio:${{ github.sha }}
+            smohanty15/8085-studio:latest
+            smohanty15/8085-studio:${{ github.sha }}
 
       - name: Trigger Render Deploy
         run: |

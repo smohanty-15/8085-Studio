@@ -9,9 +9,9 @@ COPY . .
 
 RUN mvn clean package -DskipTests
 
-# ===============================
+# ==============================
 # STAGE 2 — Run the JAR
-# ===============================
+# ==============================
 FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
